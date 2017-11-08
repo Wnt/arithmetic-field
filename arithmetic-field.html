@@ -1,0 +1,10 @@
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<dom-module id="arithmetic-field">
+<script>
+class ArithmeticField extends customElements.get('paper-input') {
+  // TODO add the value change listener where the expression is eval'd
+  static get is() { return 'arithmetic-field'; }
+}
+customElements.define(ArithmeticField.is, ArithmeticField);
+</script>
+</dom-module>

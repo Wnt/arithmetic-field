@@ -1,0 +1,21 @@
+{
+  "name": "arithmetic-field",
+  "authors": [
+    "Jonni Nakari <jonni@vaadin.com>"
+  ],
+  "description": "evaluates simple calculations",
+  "main": "arithmetic-field.html",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.0.0",
+    "paper-input": "^2.0.3"
+  }
+}
