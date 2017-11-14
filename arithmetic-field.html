@@ -2,8 +2,53 @@
 <dom-module id="arithmetic-field">
 <script>
 class ArithmeticField extends customElements.get('paper-input') {
-  // TODO add the value change listener where the expression is eval'd
   static get is() { return 'arithmetic-field'; }
+  ready() {
+    super.ready();
+    this.addEventListener('change', e => this.onValueChange());
+  }
+  onValueChange () {
+    var evaled = this.evaluateInput(this.value);
+    if (this.value != evaled) {
+      this.value = evaled;
+    }
+  }
+  evaluateInput (inputStr) {
+    // copy-pasted from https://github.com/Wnt/Vaadin-Field-arithmetics/blob/b581b952ee91e7af688df9d8fa82347b9f824754/fieldarithmetics/src/main/java/org/vaadin/addons/jonni/fieldarithmetics/client/FieldArithmeticsConnector.java#L64
+    var str = inputStr;
+		var re1 = new RegExp(",", "g");
+
+		// instead of relying to the presence of periods could use something
+		// like http://stackoverflow.com/a/1308446 to figure out the separator
+		// characters in browsers that support it
+
+		// if there are periods in the input string, remove commas (they are
+		// probably thousand separators)
+		if (str.indexOf(".") != -1) {
+			str = str.replace(re1, "");
+		}
+		else {
+			// no periods in input, replace commas with periods (they are
+			// probably decimal separators)
+			str = str.replace(re1, ".");
+		}
+
+		// remove everything except numbers, periods, operators (+, *, -, /, ^)
+		// and parenthesis
+		var re2 = new RegExp("[^\\d\\.\\+\\*\\-/\\^\\(\\)]", "g");
+		str = str.replace(re2, "");
+
+		// replace x^y expressions with Math.pow(x, y)
+		var re3 = new RegExp("(\\d+)\\^(\\d+)", "g");
+		str = str.replace(re3, "Math.pow($1, $2)");
+
+		try {
+			str = eval(str);
+		}
+		catch (e) {
+		}
+		return str;
+  }
 }
 customElements.define(ArithmeticField.is, ArithmeticField);
 </script>
